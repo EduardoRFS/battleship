@@ -77,17 +77,13 @@ describe('Join', () => {
       .send(tokens[1])
       .set('Content-Type', 'application/jwt')
       .expect(200);
-    try {
-      await request(server)
-        .post(`/${game.id}/join`)
-        .send(tokens[2])
-        .set('Content-Type', 'application/jwt');
-      throw new Error("Shouldn't be here");
-    } catch (err) {
-      const message = err.response.body.error;
-      expect(err.status).toBe(409);
-      expect(message).toBe('Game already started');
-    }
+    const response = await request(server)
+      .post(`/${game.id}/join`)
+      .send(tokens[2])
+      .set('Content-Type', 'application/jwt')
+      .expect(409);
+    const message = response.body.error;
+    expect(message).toBe('Game already started');
   });
   test('duplicated', async () => {
     const game = await createGame();
@@ -105,16 +101,12 @@ describe('Join', () => {
       .send(token)
       .set('Content-Type', 'application/jwt')
       .expect(200);
-    try {
-      await request(server)
-        .post(`/${game.id}/join`)
-        .send(token)
-        .set('Content-Type', 'application/jwt');
-      throw new Error("Shouldn't be here");
-    } catch (err) {
-      const message = err.response.body.error;
-      expect(err.status).toBe(409);
-      expect(message).toBe('You already joined this game');
-    }
+    const response = await request(server)
+      .post(`/${game.id}/join`)
+      .send(token)
+      .set('Content-Type', 'application/jwt')
+      .expect(409);
+    const message = response.body.error;
+    expect(message).toBe('You already joined this game');
   });
 });

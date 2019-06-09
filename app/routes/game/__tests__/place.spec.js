@@ -107,17 +107,13 @@ describe('Place', () => {
       player.private,
       options
     );
-    try {
-      await request(server)
-        .post(`/${game.id}/place`)
-        .send(token)
-        .set('Content-Type', 'application/jwt');
-      throw new Error("Shouldn't be here");
-    } catch (err) {
-      const message = err.response.body.error;
-      expect(err.status).toBe(400);
-      expect(message).toBe('Some position is invalid');
-    }
+    const response = await request(server)
+      .post(`/${game.id}/place`)
+      .send(token)
+      .set('Content-Type', 'application/jwt')
+      .expect(400);
+    const message = response.body.error;
+    expect(message).toBe('Some position is invalid');
   });
   test('conflict position', async () => {
     const { game, players } = await createGame();
@@ -134,17 +130,13 @@ describe('Place', () => {
       player.private,
       options
     );
-    try {
-      await request(server)
-        .post(`/${game.id}/place`)
-        .send(token)
-        .set('Content-Type', 'application/jwt');
-      throw new Error("Shouldn't be here");
-    } catch (err) {
-      const message = err.response.body.error;
-      expect(err.status).toBe(400);
-      expect(message).toBe('Some position is in conflict');
-    }
+    const response = await request(server)
+      .post(`/${game.id}/place`)
+      .send(token)
+      .set('Content-Type', 'application/jwt')
+      .expect(400);
+    const message = response.body.error;
+    expect(message).toBe('Some position is in conflict');
   });
   // TODO: validate fields and rotation using json schema
 });

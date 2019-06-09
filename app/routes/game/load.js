@@ -13,7 +13,7 @@ export default async (ctx, next) => {
     return next();
   } catch (err) {
     if (err instanceof CastError) {
-      throw new NotFound('Not found');
+      throw new NotFound('Not Found');
     }
   }
 };
